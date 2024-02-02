@@ -82,8 +82,8 @@ fun CustomTopBar(
             ) {
                 OutlinedTextField(
                     value = viewModel.strSearchDrink.value, onValueChange = {
+                        viewModel.strSearchDrink.value = it
                         if(it.isNotEmpty()) {
-                            viewModel.strSearchDrink.value = it
                             debounceJob?.cancel()
                             debounceJob = CoroutineScope(Dispatchers.Main).launch {
                                 delay(1000)

@@ -1,16 +1,13 @@
 package com.siba.myapplication.ui.components
 
 import android.graphics.Bitmap
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -37,10 +34,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
-import coil.request.ImageRequest
+import coil.compose.AsyncImage
 import coil.request.SuccessResult
+import com.google.accompanist.imageloading.rememberDrawablePainter
 import com.siba.myapplication.R
 import com.siba.myapplication.data.model.DrinksItem
 import com.siba.myapplication.ui.theme.primaryColor
@@ -74,26 +70,20 @@ fun ItemFoodCard(drink: DrinksItem, onclick: (drink: DrinksItem) -> Unit) {
             ) {
                 // Display the drink image
                 drink.strDrinkThumb?.let { imageUrl ->
-                    val painter = rememberAsyncImagePainter(
-                        ImageRequest.Builder(LocalContext.current).data(data = imageUrl)
-                            .apply(block = fun ImageRequest.Builder.() {
-                                crossfade(true)
-                                placeholder(R.drawable.progress_animation)
-                                listener { _, result ->
-                                    onImageLoadSuccess(result, dominantColor)
-                                }
-                            }).build()
-                    )
-
-                    Image(
-                        painter = painter,
-                        contentDescription = "",
+                    val context= LocalContext.current
+                    AsyncImage(
+                        model = imageUrl, contentDescription = "",
                         modifier = Modifier
                             .size(cardWidth.dp)
                             .padding(10.dp)
                             .clip(RoundedCornerShape(10.dp)),
-                        contentScale = ContentScale.FillBounds
+                        contentScale = ContentScale.FillBounds,
+                        placeholder = rememberDrawablePainter(drawable = context.getDrawable(R.drawable.progress_animation)),
+                        onSuccess = { result ->
+                            onImageLoadSuccess(result.result, dominantColor)
+                        }
                     )
+
                 }
                 // Display the drink name
                 Text(
