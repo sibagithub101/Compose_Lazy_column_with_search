@@ -17,6 +17,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class NetworkModule {
+
+    /**
+     * Provides an instance of OkHttpClient for making HTTP requests.
+     *
+     * @return An instance of OkHttpClient.
+     */
+
     @Provides
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
@@ -42,6 +49,12 @@ class NetworkModule {
         return httpClient.build()
     }
 
+    /**
+     * Provides an instance of Retrofit for defining HTTP client and BASE API .
+     *
+     * @param client The OkHttpClient instance to be used with Retrofit.
+     * @return An instance of Retrofit.
+     */
     @Provides
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
@@ -51,6 +64,12 @@ class NetworkModule {
             .client(client)
             .build()
     }
+    /**
+     * Provides an instance of the ApiService interface for making network requests.
+     *
+     * @param retrofit The Retrofit instance used to create the ApiService.
+     * @return An instance of the ApiService interface.
+     */
 
     @Singleton
     @Provides

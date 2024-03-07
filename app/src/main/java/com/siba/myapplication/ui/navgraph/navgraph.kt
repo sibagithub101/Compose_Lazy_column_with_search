@@ -1,36 +1,43 @@
 package com.siba.myapplication.ui.navgraph
 
-
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.siba.myapplication.ui.DrinksViewModel
-import com.siba.myapplication.ui.screens.DrinksDetailsPage
+import com.siba.myapplication.ui.NewsViewModel
 import com.siba.myapplication.ui.screens.HomePage
+import com.siba.myapplication.ui.screens.OfflineScreen
+import com.siba.myapplication.ui.screens.WebViewScreen
 
 @Composable
 fun SetupRootNavGraph(
     rootNavController: NavHostController,
-    drinksViewModel: DrinksViewModel
+    newsViewModel: NewsViewModel,
+    screenName: Screens
+
 ) {
     NavHost(
         navController = rootNavController,
-        startDestination = Screens.HomeScreen.route
+        startDestination = screenName.route
     ) {
 
         composable(route = Screens.HomeScreen.route) {
-            HomePage(navController = rootNavController, viewModel = drinksViewModel)
+            HomePage(navController = rootNavController, viewModel = newsViewModel)
         }
-        composable(route = Screens.DrinksDetailsScreen.route) {
-            DrinksDetailsPage(navController = rootNavController, viewModel = drinksViewModel)
+        composable(route = Screens.NewSDetailsScreen.route) {
+            WebViewScreen(navController = rootNavController, viewModel = newsViewModel)
+        }
+        composable(route = Screens.OfflineNewsScreen.route) {
+            OfflineScreen(newsViewModel = newsViewModel)
         }
 
     }
 }
-sealed class Screens(val route:String){
-object StartScreen:Screens("SplashScreen")
-object HomeScreen:Screens("HomeScreen")
-object DrinksDetailsScreen:Screens("DrinksDetailsScreen")
+
+sealed class Screens(val route: String) {
+    object HomeScreen : Screens("HomeScreen")
+    object NewSDetailsScreen : Screens("NewsDetailsScreen")
+    object OfflineNewsScreen : Screens("SaveNewsScreen")
+
 
 }
